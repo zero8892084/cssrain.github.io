@@ -1,0 +1,19 @@
+{
+  "name": "ued share page",
+  "version": "0.0.1",
+  "description": "shandl@asiainfo.com",
+  "main": "Gruntfile.js",
+  "dependencies": {
+    "grunt": "~0.4.1"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.2",
+    "grunt-contrib-handlebars": "^0.8.0",
+    "grunt-contrib-watch": "^0.6.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "shandl",
+  "license": "BSD-2-Clause"
+}
