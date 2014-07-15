@@ -19,7 +19,14 @@
         </div>
     </div>
     <div class="col-md-12">
-        <div id="output"></div>
+        <div id="loggedin">
+            <div id="header">
+                Logged in to as <span id="fullName"></span> 
+                <a id="disconnect" href="#">Log Out</a>
+            </div>
+            
+            <div id="output"></div>
+        </div>    
     </div>
 </div>
     
@@ -28,9 +35,21 @@
 <script type="text/javascript" src="res/lib/jquery/1.7.2/jquery.js"></script>
 <script src="https://api.trello.com/1/client.js?key=93a14c35871c5f65fbbfd419367b6606"></script>
 <script>
+var updateLoggedIn = function() {
+    var isLoggedIn = Trello.authorized();
+    $("#loggedout").toggle(!isLoggedIn);
+    $("#loggedin").toggle(isLoggedIn);        
+};
+    
+var logout = function() {
+    Trello.deauthorize();
+    updateLoggedIn();
+};
+
 $("#connectLink").click(function(){
     AuthenticateTrello();
 }).trigger("click");
+
 //登录
 function AuthenticateTrello() {
     Trello.authorize({
@@ -64,57 +83,58 @@ function onFailedAuthorization() {
 }
 
 /*
-addAttachmentToCard 添加附件
-addChecklistToCard 添加checklist
-addMemberToBoard 添加人员
-addMemberToCard 添加人员
-addMemberToOrganization 添加人员
-addToOrganizationBoard  添加人员
-commentCard  回复
-copyCommentCard 复制回复
-convertToCardFromCheckItem 转换checklist到cart
-copyBoard 复制board
-createBoard 新建board
-createCard 新建card
-copyCard 复制card
-createList 创建list
-createOrganization 创建组织
-deleteAttachmentFromCard 删除附件
-deleteBoardInvitation 删除board
-deleteCard 删除card
-deleteOrganizationInvitation 删除组织
-disablePowerUp 禁用powerup
-emailCard 邮件card
-enablePowerUp 启用powerup
-makeAdminOfBoard  设置管理员
-makeNormalMemberOfBoard  设置普通人员
-makeNormalMemberOfOrganization  设置人员
-makeObserverOfBoard  设置观察者
-memberJoinedTrello  人员加入
-moveCardFromBoard  移动card   ##########
-moveListFromBoard   移动list 
-moveCardToBoard  移动card   ##############
-moveListToBoard 移动list
-removeAdminFromBoard  移除管理员
-removeAdminFromOrganization  移除管理员
-removeChecklistFromCard  移除checklist
-removeFromOrganizationBoard  移除
-removeMemberFromCard  移除人员
-unconfirmedBoardInvitation    不确认的邀请
-unconfirmedOrganizationInvitation   不确认的组织
-updateBoard   更新board
-updateCard  更新card  （下面有分类）
-updateCheckItemStateOnCard  更新checklist状态     ######################
-updateChecklist  更新checklist              ###############
-updateList  更新list
-updateMember   更新人员
-updateOrganization 更新组织
-updateCard:idList  更新：idList  （使用这个即可）#############
-updateCard:closed  更新：close
-updateCard:desc  更新：详细
-updateCard:name  更新：名称
-updateList:closed   更新list
-updateList:name  更新list：name
+filter类别:
+    addAttachmentToCard 添加附件
+    addChecklistToCard 添加checklist
+    addMemberToBoard 添加人员
+    addMemberToCard 添加人员
+    addMemberToOrganization 添加人员
+    addToOrganizationBoard  添加人员
+    commentCard  回复
+    copyCommentCard 复制回复
+    convertToCardFromCheckItem 转换checklist到cart
+    copyBoard 复制board
+    createBoard 新建board
+    createCard 新建card
+    copyCard 复制card
+    createList 创建list
+    createOrganization 创建组织
+    deleteAttachmentFromCard 删除附件
+    deleteBoardInvitation 删除board
+    deleteCard 删除card
+    deleteOrganizationInvitation 删除组织
+    disablePowerUp 禁用powerup
+    emailCard 邮件card
+    enablePowerUp 启用powerup
+    makeAdminOfBoard  设置管理员
+    makeNormalMemberOfBoard  设置普通人员
+    makeNormalMemberOfOrganization  设置人员
+    makeObserverOfBoard  设置观察者
+    memberJoinedTrello  人员加入
+    moveCardFromBoard  移动card   ##########
+    moveListFromBoard   移动list 
+    moveCardToBoard  移动card   ##############
+    moveListToBoard 移动list
+    removeAdminFromBoard  移除管理员
+    removeAdminFromOrganization  移除管理员
+    removeChecklistFromCard  移除checklist
+    removeFromOrganizationBoard  移除
+    removeMemberFromCard  移除人员
+    unconfirmedBoardInvitation    不确认的邀请
+    unconfirmedOrganizationInvitation   不确认的组织
+    updateBoard   更新board
+    updateCard  更新card  （下面有分类）
+    updateCheckItemStateOnCard  更新checklist状态     ######################
+    updateChecklist  更新checklist              ###############
+    updateList  更新list
+    updateMember   更新人员
+    updateOrganization 更新组织
+    updateCard:idList  更新：idList  （使用这个即可）#############
+    updateCard:closed  更新：close
+    updateCard:desc  更新：详细
+    updateCard:name  更新：名称
+    updateList:closed   更新list
+    updateList:name  更新list：name
 */
 </script>
 
