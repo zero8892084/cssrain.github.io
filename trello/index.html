@@ -90,10 +90,10 @@ function onAuthorizeSuccessful() {
                 for(var i=0;i<cards.length;i++){
                     var arr = cards[i].data;
                     if(arr.listAfter.name=="Doing"){
-                        txtDoinghtml += "<p>"+arr.board.name+":"+arr.card.name+"</p>";
+                        txtDoinghtml += "<p><strong>"+arr.board.name+"</strong>："+arr.card.name+"</p>";
                     }
                     if(arr.listAfter.name=="Done"){
-                        txtDonehtml += "<p>"+arr.board.name+":"+arr.card.name+"</p>";
+                        txtDonehtml += "<p><strong>"+arr.board.name+"</strong>："+arr.card.name+"</p>";
                     }
                 }
                 $("#output").html(txtDonehtml +""+ txtDoinghtml);
