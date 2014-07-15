@@ -84,9 +84,9 @@ function onAuthorizeSuccessful() {
             .text("正在加载您的最近一周的工作...")
             .appendTo("#output");
         Trello.get("members/me/actions",{filter:'updateCard:idList',since:"2014-7-12 00:00:00" , before : "2014-7-15 23:59:59"}, function(cards) {
-                //console.log(cards);
-                var txtDonehtml = "<p>您本周已完成的工作如下：</p>";
-                var txtDoinghtml = "<p>您本周正在做的工作如下：</p>";
+                console.log(cards);
+                var txtDonehtml = "<h4>您本周已完成的工作如下：</h4>";
+                var txtDoinghtml = "<h4>您本周正在做的工作如下：</h4>";
                 for(var i=0;i<cards.length;i++){
                     var arr = cards[i].data;
                     if(arr.listAfter.name=="Doing"){
