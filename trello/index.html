@@ -85,11 +85,18 @@ function onAuthorizeSuccessful() {
             .appendTo("#output");
         Trello.get("members/me/actions",{filter:'updateCard:idList',since:"2014-7-12 00:00:00" , before : "2014-7-15 23:59:59"}, function(cards) {
                 //console.log(cards);
-                var txthtml = "";
+                var txtDonehtml = "<p>您本周已完成的工作如下：</p>";
+                var txtDoinghtml = "<p>您本周正在做的工作如下：</p>";
                 for(var i=0;i<cards.length;i++){
-
+                    var arr = cards[i].data;
+                    if(arr.listAfter.name=="Doing"){
+                        txtDoinghtml += "<p>"+arr.board.name+":"+arr.card.name+"</p>";
+                    }
+                    if(arr.listAfter.name=="Done"){
+                        txtDonehtml += "<p>"+arr.board.name+":"+arr.card.name+"</p>";
+                    }
                 }
-                $("#output").html(txthtml);
+                $("#output").html(txtDonehtml +""+ txtDoinghtml);
         });
     });
 }
