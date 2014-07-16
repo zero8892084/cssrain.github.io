@@ -34,7 +34,11 @@
                 <a id="disconnect" href="#">退出</a>
             </div>
             
-            <div id="output"></div>
+            <h3>本周已完成的工作：</h3>
+            <div id="outputDone"></div>
+            <h3>本周正在做的工作：</h3>
+            <div id="outputDoing"></div>
+
         </div>    
     </div>
 </div>
@@ -83,23 +87,89 @@ function onAuthorizeSuccessful() {
         var $cards = $("<div>")
             .text("正在加载您的最近一周的工作...")
             .appendTo("#output");
-        Trello.get("members/me/actions",{filter:'updateCard:idList',since:"2014-7-12 00:00:00" , before : "2014-7-15 23:59:59"}, function(cards) {
+
+               Trello.get("members/me/cards",{filter:'open',since:"2014-7-11 00:00:00" ,cards:"open", board_lists :"open", before : "2014-7-16 23:59:59",actions:"updateCard:idList"},  function(cards) {
+                      console.log(cards);
+                      for(var m=0;m<cards.length;m++){
+                            Trello.get("cards/"+cards[m].id,{filter:'open',board:true,list:true,actions:"updateCard:idList"},  function(cards) {
+                                if(cards.list.name=="Done"){
+                                    $("#outputDone").append("<p><strong>"+cards.board.name +"</strong>："+cards.name+"</p>");
+                                }
+                                if(cards.list.name=="Doing"){
+                                    $("#outputDoing").append("<p><strong>"+cards.board.name +"</strong>："+cards.name+"</p>");
+                                }
+                            },function(cards) {
+                                alert('加载数据出了点小问题，请重试！');
+                            })
+                      }             
+
+               });
+
+
+               /*
+              Trello.get("members/me",{actions:'updateCard:idList', cards : "open" , boards :"organization" , board_lists:"open" , since:"2014-7-11 00:00:00" , before : "2014-7-16 23:59:59"}, function(cards) {
+                    console.log(cards);
+                        for(var m=0;m<cards.boards.length;m++){
+                           Trello.get("members/me/cards",{filter:'open',since:"2014-7-11 00:00:00" , before : "2014-7-16 23:59:59",actions:"updateCard:idList"},  function(cards) {
+                                 console.log("具体任务：");
+                                 console.log(cards);
+
+                           });
+                        }
+               });
+               return;
+
+               //拉取所有人的记录
+               Trello.get("boards/"+cards.boards[m].id+"/lists/open",{cards:"open"},  function(cards) {
+                     console.log("具体任务：");
+                     console.log(cards);
+
+               });
+
+
+
+               Trello.get("members/me",{actions:'updateCard:idList', cards : "open" , boards :"organization" , board_lists:"open" , since:"2014-7-11 00:00:00" , before : "2014-7-16 23:59:59"}, function(cards) {
+                    console.log(cards);
+               });
+               return;
+           
+
+            Trello.get("members/me/boards",{filter:'open',since:"2014-7-11 00:00:00" , before : "2014-7-16 23:59:59"}, function(cards) {
+                console.log("board：");
                 console.log(cards);
-                var txtDonehtml = "<h4>您本周已完成的工作如下：</h4>";
-                var txtDoinghtml = "<h4>您本周正在做的工作如下：</h4>";
-                for(var i=0;i<cards.length;i++){
-                    var arr = cards[i].data;
-                    if(arr.listAfter.name=="Doing"){
-                        txtDoinghtml += "<p><strong>"+arr.board.name+"</strong>："+arr.card.name+"</p>";
-                    }
-                    if(arr.listAfter.name=="Done"){
-                        txtDonehtml += "<p><strong>"+arr.board.name+"</strong>："+arr.card.name+"</p>";
-                    }
+                for(var j=0;j<cards.length;j++){
+                   Trello.get("boards/"+cards[j].id+"/lists",{cards:'open',since:"2014-7-11 00:00:00" , before : "2014-7-16 23:59:59"}, function(cards) {
+                         console.log("listid：");
+                         console.log(cards);
+                        for(var m=0;m<cards.length;m++){
+                           Trello.get("lists/"+cards[m].id+"/cards",{actions:'updateCard:idList', members : true,since:"2014-7-11 00:00:00" , before : "2014-7-16 23:59:59"}, function(cards) {
+                                 console.log("具体任务：");
+                                 console.log(cards);
+
+                           });
+                        }
+
+                   });
                 }
-                $("#output").html(txtDonehtml +""+ txtDoinghtml);
-        });
+               
+            });
+           */
     });
 }
+
+
+               function showHtml(arrJson){
+                    var txtDonehtml = "<h4>您本周已完成的工作如下：</h4>";
+                    var txtDoinghtml = "<h4>您本周正在做的工作如下：</h4>";
+                    console.log(arrJson.done.length)
+                    for(var i=0;i<arrJson.done.length;i++){
+                        txtDonehtml += "<p>"+arrJson.done[i]+"</p>";
+                    }
+                    for(var i=0;i<arrJson.doing.length;i++){
+                        txtDoinghtml += "<p>"+arrJson.doing[i]+"</p>";
+                    }
+                    $("#output").html(txtDonehtml +""+ txtDoinghtml);
+                }
 //失败
 function onFailedAuthorization() {
     alert("登录失败!");
