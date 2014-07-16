@@ -253,16 +253,16 @@ function getListByDate(argJson){
                         }
                     }
                 }
-                console.log("具体任务：============");
+                console.log("============");
                 console.log(json);
                 var donehHtml = "";
                 var doinghHtml = "";
                 for(var g=0;g<json.cards.length;g++){
                     if(json.cards[g].listName=="Done"){
-                    	donehHtml += "<p><strong>"+json.cards[g].boardName +"：</strong>"+json.cards[g].name+"</p>";
+                    	donehHtml += "<p><strong>"+json.cards[g].boardName +"：</strong><a href="+json.cards[g].shortUrl+" target='_blank>"+json.cards[g].name+"</a></p>";
                     }
                     if(json.cards[g].listName=="Doing"){
-                    	doinghHtml += "<p><strong>"+json.cards[g].boardName+"：</strong>"+json.cards[g].name+"</p>";
+                    	doinghHtml += "<p><strong>"+json.cards[g].boardName+"：</strong><a href="+json.cards[g].shortUrl+" target='_blank>"+json.cards[g].name+"</a></p>";
                     }
                 }
                 $("#outputDone").html(donehHtml);
