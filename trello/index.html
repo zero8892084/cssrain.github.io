@@ -259,10 +259,10 @@ function getListByDate(argJson){
                 var doinghHtml = "";
                 for(var g=0;g<json.cards.length;g++){
                     if(json.cards[g].listName=="Done"){
-                    	donehHtml += "<p><strong>"+cards.board.name +"：</strong>"+cards.name+"</p>";
+                    	donehHtml += "<p><strong>"+json.cards[g].boardName +"：</strong>"+json.cards[g].name+"</p>";
                     }
                     if(json.cards[g].listName=="Doing"){
-                    	doinghHtml += "<p><strong>"+cards.board.name +"：</strong>"+cards.name+"</p>";
+                    	doinghHtml += "<p><strong>"+json.cards[g].boardName+"：</strong>"+json.cards[g].name+"</p>";
                     }
                 }
                 $("#outputDone").html(donehHtml);
