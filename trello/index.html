@@ -9,7 +9,7 @@
     <link rel="stylesheet" type="text/css" href="res/common/css3loading.css">
     <style>
     .container{
-    	max-width: 768px;
+    	max-width: 688px;
     }
     #loggedin,
     #DateWrap { 
@@ -18,12 +18,15 @@
     #followingBallsG { 
         visibility: hidden; 
     }
+    #DateWrap{
+    	padding:4px 0;
+    }
     .jumbotron {
 		text-align: center;
 		background-color: transparent;
 	}
 	.panelwrap{
-		padding:10px 60px;
+		padding:10px 20px;
 	}
 	.menu{margin-top: 10px;}
 	.fn-right{float:right;}
@@ -78,9 +81,11 @@
 				        </div>
 				    </div>
 				    <div class='col-md-4'>
-				   		<button type="button" id="loading-btn" data-loading-text="Loading..." class="btn btn-primary">
-						查看此段时间内的工作
-						</button>
+				        <div class="form-group">
+					   		<button type="button" id="loading-btn" data-loading-text="Loading..." class="btn btn-primary">
+							查看此段时间内的工作
+							</button>
+						</div>
 				    </div>
 				</div>
 
