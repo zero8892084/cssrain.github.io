@@ -229,6 +229,36 @@ function getListByDate(argJson){
 	$("#outputDone,#outputDoing").empty();
     Trello.members.get("me", function(member){
         $("#fullName").text(member.fullName);
+        var trelloPara = {
+        	cards :"visible",
+        	card_fields:"name,idBoard,idList,dateLastActivity,shortLink,shortUrl", 
+        	boards :"organization",
+        	board_fields:"name",
+        	board_lists :"open",
+        	actions:"updateCard:idList", 
+        	action_since:argJson.since, 
+        	action_before:argJson.before
+        }
+ 		Trello.get("members/me", trelloPara , function(json) {
+                console.log(json);
+                for(var m=0;m<json.cards.length;m++){
+                    for(var n=0;n<json.boards.length;n++){
+                        if( json.cards[m].idBoard==json.boards[n].id ){
+                            json.cards[m].boardName = json.boards[n].name;
+                            for(var k=0;k<json.boards[n].lists.length;k++){
+                                if( json.cards[m].idList==json.boards[n].lists[k].id ){
+                                    json.cards[m].listName = json.boards[n].lists[k].name;
+                                }
+                            }
+                        }
+                    }
+                }
+                console.log("具体任务：============");
+                console.log(json);
+           },function(cards) {
+                alert('加载数据出了点小问题，请重试！');
+        });
+        /*
         Trello.get("members/me/cards", {filter:'open' , since: argJson.since , cards:"open", board_lists :"open", before :argJson.before, actions:"updateCard:idList"},  function(cards) {
               console.log(cards);
               for(var m=0;m<cards.length;m++){
@@ -245,6 +275,7 @@ function getListByDate(argJson){
                     })
               }
         });
+		*/
     });
 }
 //失败
