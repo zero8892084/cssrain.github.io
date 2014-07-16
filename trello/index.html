@@ -80,12 +80,11 @@ function AuthenticateTrello() {
 function onAuthorizeSuccessful() {
     var token = Trello.token();
     updateLoggedIn();
-    $("#outputDone,#outputDoing").empty();
     Trello.members.get("me", function(member){
         $("#fullName").text(member.fullName);
-        var $cards = $("<div>")
+        var $cards = $("<div id='loading'>")
             .text("正在加载您的最近一周的工作...")
-            .appendTo("#outputDone,#outputDoing");
+            .appendTo("#loggedin");
 
                Trello.get("members/me/cards",{filter:'open',since:"2014-7-11 00:00:00" ,cards:"open", board_lists :"open", before : "2014-7-16 23:59:59",actions:"updateCard:idList"},  function(cards) {
                       console.log(cards);
@@ -97,11 +96,11 @@ function onAuthorizeSuccessful() {
                                 if(cards.list.name=="Doing"){
                                     $("#outputDoing").append("<p><strong>"+cards.board.name +"</strong>："+cards.name+"</p>");
                                 }
+                                $cards.hide();
                             },function(cards) {
                                 alert('加载数据出了点小问题，请重试！');
                             })
-                      }             
-
+                      }
                });
 
 
