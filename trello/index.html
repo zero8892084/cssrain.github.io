@@ -13,7 +13,7 @@
     #loggedin { 
         display: none; 
     }
-    #output {
+    .output {
         padding: 4px;
     }
     </style>
@@ -35,10 +35,9 @@
             </div>
             
             <h3>本周已完成的工作：</h3>
-            <div id="outputDone"></div>
+            <div id="outputDone" class="output"></div>
             <h3>本周正在做的工作：</h3>
-            <div id="outputDoing"></div>
-
+            <div id="outputDoing" class="output"></div>
         </div>    
     </div>
 </div>
@@ -81,12 +80,12 @@ function AuthenticateTrello() {
 function onAuthorizeSuccessful() {
     var token = Trello.token();
     updateLoggedIn();
-    $("#output").empty();
+    $("#outputDone,#outputDoing").empty();
     Trello.members.get("me", function(member){
         $("#fullName").text(member.fullName);
         var $cards = $("<div>")
             .text("正在加载您的最近一周的工作...")
-            .appendTo("#output");
+            .appendTo("#outputDone,#outputDoing");
 
                Trello.get("members/me/cards",{filter:'open',since:"2014-7-11 00:00:00" ,cards:"open", board_lists :"open", before : "2014-7-16 23:59:59",actions:"updateCard:idList"},  function(cards) {
                       console.log(cards);
@@ -157,19 +156,6 @@ function onAuthorizeSuccessful() {
     });
 }
 
-
-               function showHtml(arrJson){
-                    var txtDonehtml = "<h4>您本周已完成的工作如下：</h4>";
-                    var txtDoinghtml = "<h4>您本周正在做的工作如下：</h4>";
-                    console.log(arrJson.done.length)
-                    for(var i=0;i<arrJson.done.length;i++){
-                        txtDonehtml += "<p>"+arrJson.done[i]+"</p>";
-                    }
-                    for(var i=0;i<arrJson.doing.length;i++){
-                        txtDoinghtml += "<p>"+arrJson.doing[i]+"</p>";
-                    }
-                    $("#output").html(txtDonehtml +""+ txtDoinghtml);
-                }
 //失败
 function onFailedAuthorization() {
     alert("登录失败!");
