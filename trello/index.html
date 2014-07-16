@@ -255,6 +255,19 @@ function getListByDate(argJson){
                 }
                 console.log("具体任务：============");
                 console.log(json);
+                var donehHtml = "";
+                var doinghHtml = "";
+                for(var g=0;g<json.cards.length;g++){
+                    if(json.cards[g].listName=="Done"){
+                    	donehHtml += "<p><strong>"+cards.board.name +"：</strong>"+cards.name+"</p>";
+                    }
+                    if(json.cards[g].listName=="Doing"){
+                    	doinghHtml += "<p><strong>"+cards.board.name +"：</strong>"+cards.name+"</p>";
+                    }
+                }
+                $("#outputDone").html(donehHtml);
+                $("#outputDoing").html(doinghHtml);
+                $cards.css("visibility","hidden");
            },function(cards) {
                 alert('加载数据出了点小问题，请重试！');
         });
