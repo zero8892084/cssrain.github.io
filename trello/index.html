@@ -226,69 +226,49 @@ function getListByDate(argJson){
 		}
 	}
     var $cards = $("#followingBallsG").css("visibility","visible");
-	$("#outputDone,#outputDoing").empty();
-    Trello.members.get("me", function(member){
-        $("#fullName").text(member.fullName);
-        var trelloPara = {
-        	cards :"visible",
-        	card_fields:"name,idBoard,idList,dateLastActivity,shortLink,shortUrl", 
-        	boards :"organization",
-        	board_fields:"name",
-        	board_lists :"open",
-        	actions:"updateCard:idList", 
-        	action_since:argJson.since, 
-        	action_before:argJson.before
+	$("#outputDone,#outputDoing").empty();       
+    var trelloPara = {
+    	cards :"visible",
+    	card_fields:"name,idBoard,idList,dateLastActivity,shortLink,shortUrl", 
+    	boards :"organization",
+    	board_fields:"name",
+    	board_lists :"open",
+    	actions:"updateCard:idList", 
+    	action_since:argJson.since, 
+    	action_before:argJson.before
+    }
+	Trello.get("members/me", trelloPara , function(json) {
+        console.log(json);
+        for(var m=0;m<json.cards.length;m++){
+            for(var n=0;n<json.boards.length;n++){
+                if( json.cards[m].idBoard==json.boards[n].id ){
+                    json.cards[m].boardName = json.boards[n].name;
+                    for(var k=0;k<json.boards[n].lists.length;k++){
+                        if( json.cards[m].idList==json.boards[n].lists[k].id ){
+                            json.cards[m].listName = json.boards[n].lists[k].name;
+                        }
+                    }
+                }
+            }
         }
- 		Trello.get("members/me", trelloPara , function(json) {
-                console.log(json);
-                for(var m=0;m<json.cards.length;m++){
-                    for(var n=0;n<json.boards.length;n++){
-                        if( json.cards[m].idBoard==json.boards[n].id ){
-                            json.cards[m].boardName = json.boards[n].name;
-                            for(var k=0;k<json.boards[n].lists.length;k++){
-                                if( json.cards[m].idList==json.boards[n].lists[k].id ){
-                                    json.cards[m].listName = json.boards[n].lists[k].name;
-                                }
-                            }
-                        }
-                    }
-                }
-                console.log("============");
-                console.log(json);
-                var donehHtml = "";
-                var doinghHtml = "";
-                for(var g=0;g<json.cards.length;g++){
-                    if(json.cards[g].listName=="Done"){
-                    	donehHtml += "<p><strong>"+json.cards[g].boardName +"：</strong><a href='"+json.cards[g].shortUrl+"' target='_blank'>"+json.cards[g].name+"</a></p>";
-                    }
-                    if(json.cards[g].listName=="Doing"){
-                    	doinghHtml += "<p><strong>"+json.cards[g].boardName+"：</strong><a href='"+json.cards[g].shortUrl+"' target='_blank'>"+json.cards[g].name+"</a></p>";
-                    }
-                }
-                $("#outputDone").html(donehHtml);
-                $("#outputDoing").html(doinghHtml);
-                $cards.css("visibility","hidden");
-           },function(cards) {
-                alert('加载数据出了点小问题，请重试！');
-        });
-        /*
-        Trello.get("members/me/cards", {filter:'open' , since: argJson.since , cards:"open", board_lists :"open", before :argJson.before, actions:"updateCard:idList"},  function(cards) {
-              console.log(cards);
-              for(var m=0;m<cards.length;m++){
-                    Trello.get("cards/"+cards[m].id,{filter:'open',board:true,list:true,actions:"updateCard:idList"},  function(cards) {
-                        if(cards.list.name=="Done"){
-                            $("#outputDone").append("<p><strong>"+cards.board.name +"：</strong>"+cards.name+"</p>");
-                        }
-                        if(cards.list.name=="Doing"){
-                            $("#outputDoing").append("<p><strong>"+cards.board.name +"：</strong>"+cards.name+"</p>");
-                        }
-                        $cards.css("visibility","hidden");
-                    },function(cards) {
-                        alert('加载数据出了点小问题，请重试！');
-                    })
-              }
-        });
-		*/
+        console.log("============");
+        console.log(json);
+        var donehHtml = "";
+        var doinghHtml = "";
+        for(var g=0;g<json.cards.length;g++){
+            if(json.cards[g].listName=="Done"){
+            	donehHtml += "<p><strong>"+json.cards[g].boardName +"：</strong><a href='"+json.cards[g].shortUrl+"' target='_blank'>"+json.cards[g].name+"</a></p>";
+            }
+            if(json.cards[g].listName=="Doing"){
+            	doinghHtml += "<p><strong>"+json.cards[g].boardName+"：</strong><a href='"+json.cards[g].shortUrl+"' target='_blank'>"+json.cards[g].name+"</a></p>";
+            }
+        }
+       	$("#fullName").text(json.fullName);
+        $("#outputDone").html(donehHtml);
+        $("#outputDoing").html(doinghHtml);
+        $cards.css("visibility","hidden");
+    },function(cards) {
+        alert('加载数据出了点小问题，请重试！');
     });
 }
 //失败
