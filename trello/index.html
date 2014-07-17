@@ -180,25 +180,24 @@ $(function () {
     $('#datetimepicker8').data("DateTimePicker").setDate(getWeekStartDate());
     $('#datetimepicker9').data("DateTimePicker").setDate(getWeekEndDate());
 
+
+	//登录
+	$("#connectLink").click(function(){
+	    AuthenticateTrello();
+	});
+	//退出
+	$("#disconnect").click(logout);
 });
 
-var updateLoggedIn = function() {
+function updateLoggedIn() {
     var isLoggedIn = Trello.authorized();
     $("#loggedout").toggle(!isLoggedIn);
     $("#loggedin").toggle(isLoggedIn);        
 };
-    
-var logout = function() {
+function logout() {
     Trello.deauthorize();
     updateLoggedIn();
 };
-
-//登录
-$("#connectLink").click(function(){
-    AuthenticateTrello();
-});
-//退出
-$("#disconnect").click(logout);
 //登录
 function AuthenticateTrello() {
     Trello.authorize({
