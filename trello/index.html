@@ -238,28 +238,32 @@ function getListByDate(argJson){
     }
 	Trello.get("members/me", trelloPara , function(json) {
         console.log(json);
-        for(var m=0;m<json.cards.length;m++){
-            for(var n=0;n<json.boards.length;n++){
-                if( json.cards[m].idBoard==json.boards[n].id ){
-                    json.cards[m].boardName = json.boards[n].name;
-                    for(var k=0;k<json.boards[n].lists.length;k++){
-                        if( json.cards[m].idList==json.boards[n].lists[k].id ){
-                            json.cards[m].listName = json.boards[n].lists[k].name;
-                        }
-                    }
-                }
-            }
+        var newarr = [];
+        json.listActions = [];
+        for(var m=0;m<json.actions.length;m++){
+        	var idx = findArr(newarr,json.actions[m].data.card.id);
+        	if(idx<0){
+    			newarr.push(json.actions[m].data.card.id);
+    			var bd = {};
+    			bd.boardName = json.actions[m].data.board.name;
+    			bd.listName = json.actions[m].data.listAfter.name;
+    			bd.cardName = json.actions[m].data.card.name;
+    			bd.shortUrl = "https://trello.com/c/"+json.actions[m].data.card.shortLink;
+    			json.listActions.push(bd);
+        	}
         }
         console.log("============");
+        console.log(newarr);
         console.log(json);
         var donehHtml = "";
         var doinghHtml = "";
-        for(var g=0;g<json.cards.length;g++){
-            if(json.cards[g].listName=="Done"){
-            	donehHtml += "<p><strong>"+json.cards[g].boardName +"：</strong><a href='"+json.cards[g].shortUrl+"' target='_blank'>"+json.cards[g].name+"</a></p>";
+        for(var g=0;g<json.listActions.length;g++){
+        	var doHTML =  "<p><strong>"+json.listActions[g].boardName +"：</strong><a href='"+json.listActions[g].shortUrl+"' target='_blank'>"+json.listActions[g].cardName+"</a></p>";
+            if(json.listActions[g].listName=="Done"){
+            	donehHtml += doHTML;
             }
-            if(json.cards[g].listName=="Doing"){
-            	doinghHtml += "<p><strong>"+json.cards[g].boardName+"：</strong><a href='"+json.cards[g].shortUrl+"' target='_blank'>"+json.cards[g].name+"</a></p>";
+            if(json.listActions[g].listName=="Doing"){
+            	doinghHtml += doHTML;
             }
         }
        	$("#fullName").text(json.fullName);
@@ -273,6 +277,16 @@ function getListByDate(argJson){
 //失败
 function onFailedAuthorization() {
     alert("登录失败!");
+}
+
+//查找指定元素，返回元素位置
+function findArr(arrays,obj){
+	for (var i=0;i<arrays.length;i++){
+		if(arrays[i]===obj)	{
+			return i
+		}
+	}
+	return -1;//没找到 ，返回-1 
 }
 </script>
 </body>
